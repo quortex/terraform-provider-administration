@@ -7,10 +7,10 @@ type Resolution struct {
 }
 
 type SavcConfig struct {
-	ForceSignalLevel     bool    `json:"force_signal_level,omitempty"`
-	BufsizeRatio         float64 `json:"bufsize_ratio,omitempty"`
-	RcInitOccupancy      float64 `json:"rc_init_occupancy,omitempty"`
-	QualitySpeedOverride string  `json:"quality_speed_override,omitempty"`
+	ForceSignalLevel     bool    `json:"force_signal_level"`
+	BufsizeRatio         float64 `json:"bufsize_ratio"`
+	RcInitOccupancy      float64 `json:"rc_init_occupancy"`
+	QualitySpeedOverride string  `json:"quality_speed_override"`
 }
 
 // Advanced -
@@ -65,14 +65,16 @@ type SubtitleMedia struct {
 
 // Processing -
 type ProcessingPresets struct {
+	// Id             string           `json:"id,omitempty"`
 	Uuid           string          `json:"uuid,omitempty"`
 	Name           string          `json:"name"`
 	Identifier     string          `json:"identifier,omitempty"`
-	PoolUuid       string          `json:"pool_uuid,omitempty"`
-	Published      bool            `json:"published,omitempty"`
+	PoolUuid       string          `json:"pool_uuid"`
+	Published      bool            `json:"published"`
 	VideoMedias    []VideoMedia    `json:"video_medias,omitempty"`
 	AudioMedias    []AudioMedia    `json:"audio_medias,omitempty"`
 	SubtitleMedias []SubtitleMedia `json:"subtitle_medias,omitempty"`
-	Labels         []string        `json:"labels,omitempty"`
-	ModifiedAt     string          `json:"modified_at,omitempty"`
+	Labels         []string        `json:"labels"`
+	ModifiedAt     string          `json:"modified_at"`
+	// CreatedAt      string          `json:"created_at"`
 }

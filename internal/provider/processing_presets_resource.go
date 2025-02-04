@@ -116,9 +116,9 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 				Description: "UUID of the processing presets.",
 				Computed:    true,
 			},
-			"created_at": schema.StringAttribute{
-				Computed: true,
-			},
+			// "created_at": schema.StringAttribute{
+			// 	Computed: true,
+			// },
 			"modified_at": schema.StringAttribute{
 				Computed: true,
 			},
@@ -140,12 +140,12 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 			},
 			"video_medias": schema.ListNestedAttribute{
 				Description: "List of video medias of the processing presets.",
-				Required:    false,
+				Optional:    true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"label": schema.StringAttribute{
 							Description: "Label of the video media.",
-							Required:    false,
+							Optional:    true,
 						},
 						"codec": schema.StringAttribute{
 							Description: "Codec of the video media.",
@@ -153,19 +153,20 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 						},
 						"coder": schema.StringAttribute{
 							Description: "Coder of the video media.",
-							Required:    false,
+							Required:    true,
 						},
 						"resolution": schema.SingleNestedAttribute{
 							Attributes: map[string]schema.Attribute{
 								"width": schema.Int64Attribute{
 									Description: "Width of the resolution.",
-									Required:    false,
+									Optional:    true,
 								},
 								"height": schema.Int64Attribute{
 									Description: "Height of the resolution.",
-									Required:    false,
+									Optional:    true,
 								},
 							},
+							Required: true,
 						},
 						"bitrate": schema.Int64Attribute{
 							Description: "Bitrate of the video media.",
@@ -173,160 +174,160 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 						},
 						"framerate": schema.Float64Attribute{
 							Description: "Framerate of the video media.",
-							Required:    false,
+							Optional:    true,
 						},
 						"advanced": schema.SingleNestedAttribute{
 							Attributes: map[string]schema.Attribute{
 								"profile": schema.StringAttribute{
 									Description: "Profile of the video media.",
-									Required:    false,
+									Optional:    true,
 								},
 								"level": schema.StringAttribute{
 									Description: "Level of the video media.",
-									Required:    false,
+									Optional:    true,
 								},
 								"quality": schema.StringAttribute{
 									Description: "Quality of the video media.",
-									Required:    false,
+									Optional:    true,
 								},
 								"encoding_mode": schema.StringAttribute{
 									Description: "Encoding mode of the video media.",
-									Required:    false,
+									Optional:    true,
 								},
 								"encoding_quality": schema.Int64Attribute{
 									Description: "Encoding quality of the video media.",
-									Required:    false,
+									Optional:    true,
 								},
 								"quality_optimization": schema.StringAttribute{
 									Description: "Quality optimization of the video media.",
-									Required:    false,
+									Optional:    true,
 								},
 								"closed_gop": schema.BoolAttribute{
 									Description: "Closed gop of the video media.",
-									Required:    false,
+									Optional:    true,
 								},
 								"gop_size": schema.Int64Attribute{
 									Description: "Gop size of the video media.",
-									Required:    false,
+									Optional:    true,
 								},
 								"gop_max_size": schema.Int64Attribute{
 									Description: "Gop max size of the video media.",
-									Required:    false,
+									Optional:    true,
 								},
 								"bframe": schema.BoolAttribute{
 									Description: "Bframe of the video media.",
-									Required:    false,
+									Optional:    true,
 								},
 								"bframe_number": schema.Int64Attribute{
 									Description: "Bframe number of the video media.",
-									Required:    false,
+									Optional:    true,
 								},
 								"key_frame_interval_ms": schema.Int64Attribute{
 									Description: "Key frame interval ms of the video media.",
-									Required:    false,
+									Optional:    true,
 								},
 								"horizontal_sharpness": schema.Int64Attribute{
 									Description: "Horizontal sharpness of the video media.",
-									Required:    false,
+									Optional:    true,
 								},
 								"vertical_sharpness": schema.Int64Attribute{
 									Description: "Vertical sharpness of the video media.",
-									Required:    false,
+									Optional:    true,
 								},
 								"logo_enabled": schema.BoolAttribute{
 									Description: "Logo enabled of the video media.",
-									Required:    false,
+									Optional:    true,
 								},
 								"savc_config": schema.SingleNestedAttribute{
 									Attributes: map[string]schema.Attribute{
 										"force_signal": schema.BoolAttribute{
 											Description: "Force signal of the video media.",
-											Required:    false,
+											Optional:    true,
 										},
 										"bufsize_ratio": schema.Float64Attribute{
 											Description: "Bufsize ratio of the video media.",
-											Required:    false,
+											Optional:    true,
 										},
 										"rc_init_occupancy": schema.Float64Attribute{
 											Description: "Rc init occupancy of the video media.",
-											Required:    false,
+											Optional:    true,
 										},
 										"quality_speed_override": schema.StringAttribute{
 											Description: "Quality speed override of the video media.",
-											Required:    false,
+											Optional:    true,
 										},
 									},
-									Required: false,
+									Optional: true,
 								},
 							},
-							Required: false,
+							Optional: true,
 						},
 					},
 				},
 			},
 			"audio_medias": schema.ListNestedAttribute{
 				Description: "List of audio medias of the processing presets.",
-				Required:    false,
+				Optional:    true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"label": schema.StringAttribute{
 							Description: "Label of the audio media.",
-							Required:    false,
+							Optional:    true,
 						},
 						"codec": schema.StringAttribute{
 							Description: "Codec of the audio media.",
-							Required:    false,
+							Optional:    true,
 						},
 						"bitrate": schema.Int64Attribute{
 							Description: "Bitrate of the audio media.",
-							Required:    false,
+							Optional:    true,
 						},
 						"samplerate": schema.Int64Attribute{
 							Description: "Sample rate of the audio media.",
-							Required:    false,
+							Optional:    true,
 						},
 						"channels": schema.Int64Attribute{
 							Description: "Channels of the audio media.",
-							Required:    false,
+							Optional:    true,
 						},
 						"track": schema.StringAttribute{
 							Description: "Track of the audio media.",
-							Required:    false,
+							Optional:    true,
 						},
 						"output": schema.StringAttribute{
 							Description: "Output of the audio media.",
-							Required:    false,
+							Optional:    true,
 						},
 						"audio_description": schema.BoolAttribute{
 							Description: "Audio description of the audio media.",
-							Required:    false,
+							Optional:    true,
 						},
 					},
 				},
 			},
 			"subtitle_medias": schema.ListNestedAttribute{
 				Description: "List of subtitle medias of the processing presets.",
-				Required:    false,
+				Optional:    true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"track": schema.StringAttribute{
 							Description: "Track of the subtitle media.",
-							Required:    false,
+							Optional:    true,
 						},
 						"output": schema.StringAttribute{
 							Description: "Output of the subtitle media.",
-							Required:    false,
+							Optional:    true,
 						},
 						"deaf_and_hard_of_hearing": schema.BoolAttribute{
 							Description: "Deaf and hard of hearing of the subtitle media.",
-							Required:    false,
+							Optional:    true,
 						},
 					},
 				},
 			},
 			"labels": schema.ListAttribute{
 				Description: "List of labels of the processing presets.",
-				Required:    false,
+				Optional:    true,
 				ElementType: types.StringType,
 			},
 		},
