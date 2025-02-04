@@ -3,6 +3,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"terraform-provider-administration/internal/client"
@@ -38,7 +39,6 @@ type Advanced struct {
 	GopMaxSize          types.Int64  `tfsdk:"gop_max_size"`
 	Bframe              types.Bool   `tfsdk:"bframe"`
 	BframeNumber        types.Int64  `tfsdk:"bframe_number"`
-	Maxrate             types.Int64  `tfsdk:"maxrate"`
 	KeyFrameIntervalMs  types.Int64  `tfsdk:"key_frame_interval_ms"`
 	HorizontalSharpness types.Int64  `tfsdk:"horizontal_sharpness"`
 	VerticalSharpness   types.Int64  `tfsdk:"vertical_sharpness"`
@@ -159,11 +159,11 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 							Attributes: map[string]schema.Attribute{
 								"width": schema.Int64Attribute{
 									Description: "Width of the resolution.",
-									Optional:    true,
+									Required:    true,
 								},
 								"height": schema.Int64Attribute{
 									Description: "Height of the resolution.",
-									Optional:    true,
+									Required:    true,
 								},
 							},
 						},
@@ -241,7 +241,7 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 								"savc_config": schema.SingleNestedAttribute{
 									Optional: true,
 									Attributes: map[string]schema.Attribute{
-										"force_signal": schema.BoolAttribute{
+										"force_signal_level": schema.BoolAttribute{
 											Description: "Force signal of the video media.",
 											Optional:    true,
 										},
@@ -281,11 +281,11 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 							Description: "Bitrate of the audio media.",
 							Optional:    true,
 						},
-						"samplerate": schema.Int64Attribute{
+						"samplerate": schema.StringAttribute{
 							Description: "Sample rate of the audio media.",
 							Optional:    true,
 						},
-						"channels": schema.Int64Attribute{
+						"channels": schema.StringAttribute{
 							Description: "Channels of the audio media.",
 							Optional:    true,
 						},
@@ -334,6 +334,9 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 }
 
 func ProcessingPresetsModelToProcessingPresets(processing processingPresetsResourceModel) *client.ProcessingPresets {
+
+	log.Printf("ProcessingPresetsModelToProcessingPresets processing: %+v", processing)
+
 	newProcessing := client.ProcessingPresets{
 		Uuid:      processing.Uuid.ValueString(),
 		Name:      processing.Name.ValueString(),
@@ -343,6 +346,7 @@ func ProcessingPresetsModelToProcessingPresets(processing processingPresetsResou
 
 	var videoMedias = []client.VideoMedia{}
 	for _, videoMediaItem := range processing.VideoMedias {
+
 		videoMedias = append(videoMedias, client.VideoMedia{
 			Codec:     videoMediaItem.Codec.ValueString(),
 			Coder:     videoMediaItem.Coder.ValueString(),
@@ -352,9 +356,6 @@ func ProcessingPresetsModelToProcessingPresets(processing processingPresetsResou
 				Width:  int(videoMediaItem.Resolution.Width.ValueInt64()),
 				Height: int(videoMediaItem.Resolution.Height.ValueInt64()),
 			},
-
-			// advanceditem: videoMediaItem.Advanced,
-
 			Advanced: client.Advanced{
 				Profile:             videoMediaItem.Advanced.Profile.ValueString(),
 				Level:               videoMediaItem.Advanced.Level.ValueString(),
@@ -371,15 +372,10 @@ func ProcessingPresetsModelToProcessingPresets(processing processingPresetsResou
 				HorizontalSharpness: int(videoMediaItem.Advanced.HorizontalSharpness.ValueInt64()),
 				VerticalSharpness:   int(videoMediaItem.Advanced.VerticalSharpness.ValueInt64()),
 				LogoEnabled:         videoMediaItem.Advanced.LogoEnabled.ValueBool(),
-
-				SavcConfig: client.SavcConfig{
-					ForceSignalLevel:     videoMediaItem.Advanced.SavcConfig.ForceSignalLevel.ValueBool(),
-					BufsizeRatio:         videoMediaItem.Advanced.SavcConfig.BufsizeRatio.ValueFloat64(),
-					RcInitOccupancy:      videoMediaItem.Advanced.SavcConfig.RcInitOccupancy.ValueFloat64(),
-					QualitySpeedOverride: videoMediaItem.Advanced.SavcConfig.QualitySpeedOverride.ValueString(),
-				},
+				SavcConfig:          client.SavcConfig{},
 			},
 		})
+
 	}
 
 	var audioMedias = []client.AudioMedia{}
@@ -416,6 +412,10 @@ func ProcessingPresetsModelToProcessingPresets(processing processingPresetsResou
 }
 
 func ProcessingPresetsToProcessingPresetsModel(processing client.ProcessingPresets, model *processingPresetsResourceModel) {
+
+	log.Printf("ProcessingPresetsToProcessingPresetsModel processing: %+v", processing)
+	log.Printf("ProcessingPresetsToProcessingPresetsModel model: %+v", model)
+
 	model.Uuid = types.StringValue(processing.Uuid)
 	model.Name = types.StringValue(processing.Name)
 	model.Published = types.BoolValue(processing.Published)
@@ -451,12 +451,7 @@ func ProcessingPresetsToProcessingPresetsModel(processing client.ProcessingPrese
 				HorizontalSharpness: types.Int64Value(int64(videoMediaItem.Advanced.HorizontalSharpness)),
 				VerticalSharpness:   types.Int64Value(int64(videoMediaItem.Advanced.VerticalSharpness)),
 				LogoEnabled:         types.BoolValue(videoMediaItem.Advanced.LogoEnabled),
-				SavcConfig: SavcConfig{
-					ForceSignalLevel:     types.BoolValue(videoMediaItem.Advanced.SavcConfig.ForceSignalLevel),
-					BufsizeRatio:         types.Float64Value(videoMediaItem.Advanced.SavcConfig.BufsizeRatio),
-					RcInitOccupancy:      types.Float64Value(videoMediaItem.Advanced.SavcConfig.RcInitOccupancy),
-					QualitySpeedOverride: types.StringValue(videoMediaItem.Advanced.SavcConfig.QualitySpeedOverride),
-				},
+				SavcConfig:          SavcConfig{},
 			},
 		})
 	}
@@ -494,6 +489,7 @@ func ProcessingPresetsToProcessingPresetsModel(processing client.ProcessingPrese
 }
 
 func (r *processingPresetsResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	log.Printf("Create processing presets")
 	var processing processingPresetsResourceModel
 	diags := req.Plan.Get(ctx, &processing)
 	resp.Diagnostics.Append(diags...)

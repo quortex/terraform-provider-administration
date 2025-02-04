@@ -41,11 +41,11 @@ Optional:
 
 - `audio_description` (Boolean) Audio description of the audio media.
 - `bitrate` (Number) Bitrate of the audio media.
-- `channels` (Number) Channels of the audio media.
+- `channels` (String) Channels of the audio media.
 - `codec` (String) Codec of the audio media.
 - `label` (String) Label of the audio media.
 - `output` (String) Output of the audio media.
-- `samplerate` (Number) Sample rate of the audio media.
+- `samplerate` (String) Sample rate of the audio media.
 - `track` (String) Track of the audio media.
 
 
@@ -78,7 +78,7 @@ Optional:
 <a id="nestedatt--video_medias--resolution"></a>
 ### Nested Schema for `video_medias.resolution`
 
-Optional:
+Required:
 
 - `height` (Number) Height of the resolution.
 - `width` (Number) Width of the resolution.
@@ -112,6 +112,6 @@ Optional:
 Optional:
 
 - `bufsize_ratio` (Number) Bufsize ratio of the video media.
-- `force_signal` (Boolean) Force signal of the video media.
+- `force_signal_level` (Boolean) Force signal of the video media.
 - `quality_speed_override` (String) Quality speed override of the video media.
 - `rc_init_occupancy` (Number) Rc init occupancy of the video media.
