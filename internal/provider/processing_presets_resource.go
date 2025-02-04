@@ -26,7 +26,6 @@ type SavcConfig struct {
 	QualitySpeedOverride types.String  `tfsdk:"quality_speed_override"`
 }
 
-// Advanced -
 type Advanced struct {
 	Profile             types.String `tfsdk:"profile"`
 	Level               types.String `tfsdk:"level"`
@@ -509,7 +508,7 @@ func (r *processingPresetsResource) Create(ctx context.Context, req resource.Cre
 		return
 	}
 
-	// Map response body to schema and populate Computed attribute values
+	// Map response body to schema and populate Computed attribute values.
 	processing.Identifier = types.StringValue(rproc.Identifier)
 	processing.Name = types.StringValue(rproc.Name)
 	processing.Uuid = types.StringValue(rproc.Uuid)
@@ -572,7 +571,7 @@ func (r *processingPresetsResource) Update(ctx context.Context, req resource.Upd
 		return
 	}
 
-	// Map response body to schema and populate Computed attribute values
+	// Map response body to schema and populate Computed attribute values.
 	processing.Identifier = types.StringValue(rproc.Identifier)
 	processing.Name = types.StringValue(rproc.Name)
 	processing.Uuid = types.StringValue(rproc.Uuid)
@@ -606,15 +605,13 @@ func (r *processingPresetsResource) Delete(ctx context.Context, req resource.Del
 	}
 }
 
-// TODO do i need that ?
 func (r *processingPresetsResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	// Retrieve import ID and save to id attribute
+	// Retrieve import ID and save to id attribute.
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }
 
-// TODO do i need that ?
 func (r *processingPresetsResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
-	// Add a nil check when handling ProviderData because Terraform
+	// Add a nil check when handling ProviderData because Terraform.
 	// sets that data after it calls the ConfigureProvider RPC.
 	if req.ProviderData == nil {
 		return

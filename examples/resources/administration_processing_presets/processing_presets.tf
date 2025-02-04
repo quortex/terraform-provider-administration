@@ -1,6 +1,7 @@
 resource "administration_processing_presets" "preset_1080p_25fps" {
   name      = "Up to 1080p, H.264, 25fps"
   pool_uuid = "pool_6lnvgxmv"
+
   # published = true
 
   video_medias = [{

@@ -1,6 +1,5 @@
 package client
 
-// Resolution -
 type Resolution struct {
 	Width  int `json:"width"`
 	Height int `json:"height"`
@@ -13,7 +12,6 @@ type SavcConfig struct {
 	QualitySpeedOverride string  `json:"quality_speed_override"`
 }
 
-// Advanced -
 type Advanced struct {
 	Profile             string     `json:"profile,omitempty"`
 	Level               string     `json:"level,omitempty"`
@@ -33,7 +31,6 @@ type Advanced struct {
 	SavcConfig          SavcConfig `json:"savc_config,omitempty"`
 }
 
-// VideoMedia -
 type VideoMedia struct {
 	Label      string     `json:"label,omitempty"`
 	Codec      string     `json:"codec"`
@@ -44,7 +41,6 @@ type VideoMedia struct {
 	Advanced   Advanced   `json:"advanced,omitempty"`
 }
 
-// AudioMedia -
 type AudioMedia struct {
 	Label            string `json:"label,omitempty"`
 	Codec            string `json:"codec"`
@@ -56,16 +52,13 @@ type AudioMedia struct {
 	AudioDescription bool   `json:"audio_description"`
 }
 
-// SubtitleMedia -
 type SubtitleMedia struct {
 	Track                string `json:"track"`
 	Output               string `json:"output"`
 	DeafAndHardOfHearing bool   `json:"deaf_and_hard_of_hearing"`
 }
 
-// Processing -
 type ProcessingPresets struct {
-	// Id             string           `json:"id,omitempty"`
 	Uuid           string          `json:"uuid,omitempty"`
 	Name           string          `json:"name"`
 	Identifier     string          `json:"identifier,omitempty"`
@@ -76,5 +69,4 @@ type ProcessingPresets struct {
 	SubtitleMedias []SubtitleMedia `json:"subtitle_medias,omitempty"`
 	Labels         []string        `json:"labels"`
 	ModifiedAt     string          `json:"modified_at"`
-	// CreatedAt      string          `json:"created_at"`
 }
