@@ -47,6 +47,7 @@ type Advanced struct {
 }
 
 type VideoMedia struct {
+	Label      types.String `tfsdk:"label"`
 	Codec      types.String `tfsdk:"codec"`
 	Coder      types.String `tfsdk:"coder"`
 	Resolution Resolution   `tfsdk:"resolution"`
@@ -116,9 +117,6 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 				Description: "UUID of the processing presets.",
 				Computed:    true,
 			},
-			// "created_at": schema.StringAttribute{
-			// 	Computed: true,
-			// },
 			"modified_at": schema.StringAttribute{
 				Computed: true,
 			},
@@ -156,6 +154,8 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 							Required:    true,
 						},
 						"resolution": schema.SingleNestedAttribute{
+							Description: "Resolution of the video media.",
+							Required:    true,
 							Attributes: map[string]schema.Attribute{
 								"width": schema.Int64Attribute{
 									Description: "Width of the resolution.",
@@ -166,17 +166,17 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 									Optional:    true,
 								},
 							},
-							Required: true,
 						},
 						"bitrate": schema.Int64Attribute{
 							Description: "Bitrate of the video media.",
 							Required:    true,
 						},
-						"framerate": schema.Float64Attribute{
+						"framerate": schema.StringAttribute{
 							Description: "Framerate of the video media.",
 							Optional:    true,
 						},
 						"advanced": schema.SingleNestedAttribute{
+							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"profile": schema.StringAttribute{
 									Description: "Profile of the video media.",
@@ -239,6 +239,7 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 									Optional:    true,
 								},
 								"savc_config": schema.SingleNestedAttribute{
+									Optional: true,
 									Attributes: map[string]schema.Attribute{
 										"force_signal": schema.BoolAttribute{
 											Description: "Force signal of the video media.",
@@ -257,10 +258,8 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 											Optional:    true,
 										},
 									},
-									Optional: true,
 								},
 							},
-							Optional: true,
 						},
 					},
 				},
@@ -348,9 +347,7 @@ func ProcessingPresetsModelToProcessingPresets(processing processingPresetsResou
 			Codec:     videoMediaItem.Codec.ValueString(),
 			Coder:     videoMediaItem.Coder.ValueString(),
 			Bitrate:   int(videoMediaItem.Bitrate.ValueInt64()),
-			Framerate: videoMediaItem.Framerate.String(),
-
-			//TODO : why & ?
+			Framerate: videoMediaItem.Framerate.ValueString(),
 			Resolution: client.Resolution{
 				Width:  int(videoMediaItem.Resolution.Width.ValueInt64()),
 				Height: int(videoMediaItem.Resolution.Height.ValueInt64()),
@@ -410,6 +407,10 @@ func ProcessingPresetsModelToProcessingPresets(processing processingPresetsResou
 	newProcessing.VideoMedias = videoMedias
 	newProcessing.AudioMedias = audioMedias
 	newProcessing.SubtitleMedias = subtitleMedias
+	newProcessing.Labels = []string{}
+	for _, labelItem := range processing.Labels {
+		newProcessing.Labels = append(newProcessing.Labels, labelItem.ValueString())
+	}
 
 	return &newProcessing
 }
@@ -423,19 +424,17 @@ func ProcessingPresetsToProcessingPresetsModel(processing client.ProcessingPrese
 	model.VideoMedias = []VideoMedia{}
 	for _, videoMediaItem := range processing.VideoMedias {
 		model.VideoMedias = append(model.VideoMedias, VideoMedia{
-			Codec:   types.StringValue(videoMediaItem.Codec),
-			Coder:   types.StringValue(videoMediaItem.Coder),
-			Bitrate: types.Int64Value(int64(videoMediaItem.Bitrate)),
-			//TODO : not string?
-			// Framerate: videoMediaItem.Framerate),
+			Label:     types.StringValue(videoMediaItem.Label),
+			Codec:     types.StringValue(videoMediaItem.Codec),
+			Coder:     types.StringValue(videoMediaItem.Coder),
+			Bitrate:   types.Int64Value(int64(videoMediaItem.Bitrate)),
+			Framerate: types.StringValue(videoMediaItem.Framerate),
 
-			//TODO : why & ?
 			Resolution: Resolution{
 				Width:  types.Int64Value(int64(videoMediaItem.Resolution.Width)),
 				Height: types.Int64Value(int64(videoMediaItem.Resolution.Height)),
 			},
 
-			//TODO : why & ?
 			Advanced: Advanced{
 				Profile:             types.StringValue(videoMediaItem.Advanced.Profile),
 				Level:               types.StringValue(videoMediaItem.Advanced.Level),
