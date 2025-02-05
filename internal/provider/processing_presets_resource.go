@@ -11,6 +11,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -19,12 +21,12 @@ type Resolution struct {
 	Height types.Int64 `tfsdk:"height"`
 }
 
-type SavcConfig struct {
-	ForceSignalLevel     types.Bool    `tfsdk:"force_signal_level"`
-	BufsizeRatio         types.Float64 `tfsdk:"bufsize_ratio"`
-	RcInitOccupancy      types.Float64 `tfsdk:"rc_init_occupancy"`
-	QualitySpeedOverride types.String  `tfsdk:"quality_speed_override"`
-}
+// type SavcConfig struct {
+// 	ForceSignalLevel     types.Bool    `tfsdk:"force_signal_level"`
+// 	BufsizeRatio         types.Float64 `tfsdk:"bufsize_ratio"`
+// 	RcInitOccupancy      types.Float64 `tfsdk:"rc_init_occupancy"`
+// 	QualitySpeedOverride types.String  `tfsdk:"quality_speed_override"`
+// }
 
 type Advanced struct {
 	Profile             types.String `tfsdk:"profile"`
@@ -42,47 +44,54 @@ type Advanced struct {
 	HorizontalSharpness types.Int64  `tfsdk:"horizontal_sharpness"`
 	VerticalSharpness   types.Int64  `tfsdk:"vertical_sharpness"`
 	LogoEnabled         types.Bool   `tfsdk:"logo_enabled"`
-	SavcConfig          SavcConfig   `tfsdk:"savc_config"`
+	// SavcConfig          SavcConfig   `tfsdk:"savc_config"`
 }
 
 type VideoMedia struct {
-	Label      types.String `tfsdk:"label"`
-	Codec      types.String `tfsdk:"codec"`
-	Coder      types.String `tfsdk:"coder"`
+	Label types.String `tfsdk:"label"`
+	Codec types.String `tfsdk:"codec"`
+	// Coder      types.String `tfsdk:"coder"`
 	Resolution Resolution   `tfsdk:"resolution"`
 	Bitrate    types.Int64  `tfsdk:"bitrate"`
 	Framerate  types.String `tfsdk:"framerate"`
-	Advanced   Advanced     `tfsdk:"advanced"`
+	// Advanced   Advanced     `tfsdk:"advanced"`
 }
 
 type AudioMedia struct {
 	Codec            types.String `tfsdk:"codec"`
-	Label            types.String `tfsdk:"label"`
+	Channels         types.String `tfsdk:"channels"`
 	Bitrate          types.Int64  `tfsdk:"bitrate"`
 	Samplerate       types.String `tfsdk:"samplerate"`
-	Channels         types.String `tfsdk:"channels"`
 	Track            types.String `tfsdk:"track"`
 	Output           types.String `tfsdk:"output"`
+	OutputLabel      types.String `tfsdk:"output_label"`
 	AudioDescription types.Bool   `tfsdk:"audio_description"`
+	Label            types.String `tfsdk:"label"`
 }
 
 type SubtitleMedia struct {
 	Track                types.String `tfsdk:"track"`
+	Bitrate              types.Int64  `tfsdk:"bitrate"`
 	Output               types.String `tfsdk:"output"`
+	OutputLabel          types.String `tfsdk:"output_label"`
 	DeafAndHardOfHearing types.Bool   `tfsdk:"deaf_and_hard_of_hearing"`
 }
 
 type processingPresetsResourceModel struct {
-	Uuid           types.String    `tfsdk:"uuid"`
-	Name           types.String    `tfsdk:"name"`
-	Identifier     types.String    `tfsdk:"identifier"`
-	Published      types.Bool      `tfsdk:"published"`
-	PoolUuid       types.String    `tfsdk:"pool_uuid"`
+	// Params on api resources
+	Organization types.String `tfsdk:"org"`
+	Type         types.String `tfsdk:"type"`
+	// actual fields
+	Uuid types.String `tfsdk:"uuid"`
+	Name types.String `tfsdk:"name"`
+	// Identifier     types.String    `tfsdk:"identifier"`
+	// Published      types.Bool      `tfsdk:"published"`
+	// PoolUuid       types.String    `tfsdk:"pool_uuid"`
 	VideoMedias    []VideoMedia    `tfsdk:"video_medias"`
 	AudioMedias    []AudioMedia    `tfsdk:"audio_medias"`
 	SubtitleMedias []SubtitleMedia `tfsdk:"subtitle_medias"`
-	Labels         []types.String  `tfsdk:"labels"`
-	ModifiedAt     types.String    `tfsdk:"modified_at"`
+	// Labels         []types.String  `tfsdk:"labels"`
+	// ModifiedAt     types.String    `tfsdk:"modified_at"`
 }
 
 // Ensure the implementation satisfies the expected interfaces.
@@ -112,29 +121,40 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 	resp.Schema = schema.Schema{
 		Description: "Manages a processing presets.",
 		Attributes: map[string]schema.Attribute{
+			"org": schema.StringAttribute{
+				Description: "Organization UUID of the processing presets needed for admin API.",
+				Optional:    true,
+			},
+			"type": schema.StringAttribute{
+				Description: "Type of the processing presets.",
+				Optional:    true,
+			},
 			"uuid": schema.StringAttribute{
 				Description: "UUID of the processing presets.",
 				Computed:    true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
-			"modified_at": schema.StringAttribute{
-				Computed: true,
-			},
+			// "modified_at": schema.StringAttribute{
+			// 	Computed: true,
+			// },
 			"name": schema.StringAttribute{
 				Description: "Name of the processing presets.",
 				Required:    true,
 			},
-			"identifier": schema.StringAttribute{
-				Description: "Identifier of the processing presets.",
-				Computed:    true,
-			},
-			"published": schema.BoolAttribute{
-				Description: "Published status of the processing presets.",
-				Computed:    true,
-			},
-			"pool_uuid": schema.StringAttribute{
-				Description: "Pool UUID of the processing presets.",
-				Required:    true,
-			},
+			// "identifier": schema.StringAttribute{
+			// 	Description: "Identifier of the processing presets.",
+			// 	Computed:    true,
+			// },
+			// "published": schema.BoolAttribute{
+			// 	Description: "Published status of the processing presets.",
+			// 	Computed:    true,
+			// },
+			// "pool_uuid": schema.StringAttribute{
+			// 	Description: "Pool UUID of the processing presets.",
+			// 	Required:    true,
+			// },
 			"video_medias": schema.ListNestedAttribute{
 				Description: "List of video medias of the processing presets.",
 				Optional:    true,
@@ -148,10 +168,10 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 							Description: "Codec of the video media.",
 							Required:    true,
 						},
-						"coder": schema.StringAttribute{
-							Description: "Coder of the video media.",
-							Required:    true,
-						},
+						// "coder": schema.StringAttribute{
+						// 	Description: "Coder of the video media.",
+						// 	Required:    true,
+						// },
 						"resolution": schema.SingleNestedAttribute{
 							Description: "Resolution of the video media.",
 							Required:    true,
@@ -174,104 +194,101 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 							Description: "Framerate of the video media.",
 							Optional:    true,
 						},
-						"advanced": schema.SingleNestedAttribute{
-							Optional: true,
-							Attributes: map[string]schema.Attribute{
-								"profile": schema.StringAttribute{
-									Description: "Profile of the video media.",
-									Optional:    true,
-								},
-								"level": schema.StringAttribute{
-									Description: "Level of the video media.",
-									Optional:    true,
-								},
-								"quality": schema.StringAttribute{
-									Description: "Quality of the video media.",
-									Optional:    true,
-								},
-								"encoding_mode": schema.StringAttribute{
-									Description: "Encoding mode of the video media.",
-									Optional:    true,
-								},
-								"encoding_quality": schema.Int64Attribute{
-									Description: "Encoding quality of the video media.",
-									Optional:    true,
-								},
-								"quality_optimization": schema.StringAttribute{
-									Description: "Quality optimization of the video media.",
-									Optional:    true,
-								},
-								"closed_gop": schema.BoolAttribute{
-									Description: "Closed gop of the video media.",
-									Optional:    true,
-								},
-								"gop_size": schema.Int64Attribute{
-									Description: "Gop size of the video media.",
-									Optional:    true,
-								},
-								"gop_max_size": schema.Int64Attribute{
-									Description: "Gop max size of the video media.",
-									Optional:    true,
-								},
-								"bframe": schema.BoolAttribute{
-									Description: "Bframe of the video media.",
-									Optional:    true,
-								},
-								"bframe_number": schema.Int64Attribute{
-									Description: "Bframe number of the video media.",
-									Optional:    true,
-								},
-								"key_frame_interval_ms": schema.Int64Attribute{
-									Description: "Key frame interval ms of the video media.",
-									Optional:    true,
-								},
-								"horizontal_sharpness": schema.Int64Attribute{
-									Description: "Horizontal sharpness of the video media.",
-									Optional:    true,
-								},
-								"vertical_sharpness": schema.Int64Attribute{
-									Description: "Vertical sharpness of the video media.",
-									Optional:    true,
-								},
-								"logo_enabled": schema.BoolAttribute{
-									Description: "Logo enabled of the video media.",
-									Optional:    true,
-								},
-								"savc_config": schema.SingleNestedAttribute{
-									Optional: true,
-									Attributes: map[string]schema.Attribute{
-										"force_signal_level": schema.BoolAttribute{
-											Description: "Force signal of the video media.",
-											Optional:    true,
-										},
-										"bufsize_ratio": schema.Float64Attribute{
-											Description: "Bufsize ratio of the video media.",
-											Optional:    true,
-										},
-										"rc_init_occupancy": schema.Float64Attribute{
-											Description: "Rc init occupancy of the video media.",
-											Optional:    true,
-										},
-										"quality_speed_override": schema.StringAttribute{
-											Description: "Quality speed override of the video media.",
-											Optional:    true,
-										},
-									},
-								},
-							},
-						},
+						// "advanced": schema.SingleNestedAttribute{
+						// 	Optional: true,
+						// 	Required: false,
+						// 	Attributes: map[string]schema.Attribute{
+						// 		"profile": schema.StringAttribute{
+						// 			Description: "Profile of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 		"level": schema.StringAttribute{
+						// 			Description: "Level of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 		"quality": schema.StringAttribute{
+						// 			Description: "Quality of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 		"encoding_mode": schema.StringAttribute{
+						// 			Description: "Encoding mode of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 		"encoding_quality": schema.Int64Attribute{
+						// 			Description: "Encoding quality of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 		"quality_optimization": schema.StringAttribute{
+						// 			Description: "Quality optimization of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 		"closed_gop": schema.BoolAttribute{
+						// 			Description: "Closed gop of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 		"gop_size": schema.Int64Attribute{
+						// 			Description: "Gop size of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 		"gop_max_size": schema.Int64Attribute{
+						// 			Description: "Gop max size of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 		"bframe": schema.BoolAttribute{
+						// 			Description: "Bframe of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 		"bframe_number": schema.Int64Attribute{
+						// 			Description: "Bframe number of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 		"key_frame_interval_ms": schema.Int64Attribute{
+						// 			Description: "Key frame interval ms of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 		"horizontal_sharpness": schema.Int64Attribute{
+						// 			Description: "Horizontal sharpness of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 		"vertical_sharpness": schema.Int64Attribute{
+						// 			Description: "Vertical sharpness of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 		"logo_enabled": schema.BoolAttribute{
+						// 			Description: "Logo enabled of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// "savc_config": schema.SingleNestedAttribute{
+						// 	Optional: true,
+						// 	Attributes: map[string]schema.Attribute{
+						// 		"force_signal_level": schema.BoolAttribute{
+						// 			Description: "Force signal of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 		"bufsize_ratio": schema.Float64Attribute{
+						// 			Description: "Bufsize ratio of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 		"rc_init_occupancy": schema.Float64Attribute{
+						// 			Description: "Rc init occupancy of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 		"quality_speed_override": schema.StringAttribute{
+						// 			Description: "Quality speed override of the video media.",
+						// 			Optional:    true,
+						// 		},
+						// 	},
+						// },
+						// },
 					},
 				},
 			},
+			// },
 			"audio_medias": schema.ListNestedAttribute{
 				Description: "List of audio medias of the processing presets.",
 				Optional:    true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"label": schema.StringAttribute{
-							Description: "Label of the audio media.",
-							Optional:    true,
-						},
 						"codec": schema.StringAttribute{
 							Description: "Codec of the audio media.",
 							Optional:    true,
@@ -296,8 +313,16 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 							Description: "Output of the audio media.",
 							Optional:    true,
 						},
+						"output_label": schema.StringAttribute{
+							Description: "Output label of the audio media.",
+							Optional:    true,
+						},
 						"audio_description": schema.BoolAttribute{
 							Description: "Audio description of the audio media.",
+							Optional:    true,
+						},
+						"label": schema.StringAttribute{
+							Description: "Label of the audio media.",
 							Optional:    true,
 						},
 					},
@@ -312,8 +337,16 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 							Description: "Track of the subtitle media.",
 							Optional:    true,
 						},
+						"bitrate": schema.Int64Attribute{
+							Description: "Bitrate of the subtitle media.",
+							Optional:    true,
+						},
 						"output": schema.StringAttribute{
 							Description: "Output of the subtitle media.",
+							Optional:    true,
+						},
+						"output_label": schema.StringAttribute{
+							Description: "Output label of the subtitle media.",
 							Optional:    true,
 						},
 						"deaf_and_hard_of_hearing": schema.BoolAttribute{
@@ -323,58 +356,71 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 					},
 				},
 			},
-			"labels": schema.ListAttribute{
-				Description: "List of labels of the processing presets.",
-				Optional:    true,
-				ElementType: types.StringType,
-			},
+			// "labels": schema.ListAttribute{
+			// 	Description: "List of labels of the processing presets.",
+			// 	Optional:    true,
+			// 	ElementType: types.StringType,
+			// },
 		},
 	}
 }
 
-func ProcessingPresetsModelToProcessingPresets(processing processingPresetsResourceModel) *client.ProcessingPresets {
-
-	log.Printf("ProcessingPresetsModelToProcessingPresets processing: %+v", processing)
+func ProcessingPresetsModelToProcessingPresetsJson(processing processingPresetsResourceModel) *client.ProcessingPresets {
 
 	newProcessing := client.ProcessingPresets{
-		Uuid:      processing.Uuid.ValueString(),
-		Name:      processing.Name.ValueString(),
-		Published: processing.Published.ValueBool(),
-		PoolUuid:  processing.PoolUuid.ValueString(),
+		// Uuid: processing.Uuid.ValueString(),
+		Name: processing.Name.ValueString(),
+		// Published: processing.Published.ValueBool(),
+		// PoolUuid:  processing.PoolUuid.ValueString(),
 	}
 
 	var videoMedias = []client.VideoMedia{}
 	for _, videoMediaItem := range processing.VideoMedias {
-
 		videoMedias = append(videoMedias, client.VideoMedia{
 			Codec:     videoMediaItem.Codec.ValueString(),
-			Coder:     videoMediaItem.Coder.ValueString(),
 			Bitrate:   int(videoMediaItem.Bitrate.ValueInt64()),
 			Framerate: videoMediaItem.Framerate.ValueString(),
 			Resolution: client.Resolution{
 				Width:  int(videoMediaItem.Resolution.Width.ValueInt64()),
 				Height: int(videoMediaItem.Resolution.Height.ValueInt64()),
 			},
-			Advanced: client.Advanced{
-				Profile:             videoMediaItem.Advanced.Profile.ValueString(),
-				Level:               videoMediaItem.Advanced.Level.ValueString(),
-				Quality:             videoMediaItem.Advanced.Quality.ValueString(),
-				EncodingMode:        videoMediaItem.Advanced.EncodingMode.ValueString(),
-				EncodingQuality:     int(videoMediaItem.Advanced.EncodingQuality.ValueInt64()),
-				QualityOptimization: videoMediaItem.Advanced.QualityOptimization.ValueString(),
-				ClosedGop:           videoMediaItem.Advanced.ClosedGop.ValueBool(),
-				GopSize:             int(videoMediaItem.Advanced.GopSize.ValueInt64()),
-				GopMaxSize:          int(videoMediaItem.Advanced.GopMaxSize.ValueInt64()),
-				Bframe:              videoMediaItem.Advanced.Bframe.ValueBool(),
-				BframeNumber:        int(videoMediaItem.Advanced.BframeNumber.ValueInt64()),
-				KeyFrameIntervalMs:  int(videoMediaItem.Advanced.KeyFrameIntervalMs.ValueInt64()),
-				HorizontalSharpness: int(videoMediaItem.Advanced.HorizontalSharpness.ValueInt64()),
-				VerticalSharpness:   int(videoMediaItem.Advanced.VerticalSharpness.ValueInt64()),
-				LogoEnabled:         videoMediaItem.Advanced.LogoEnabled.ValueBool(),
-				SavcConfig:          client.SavcConfig{},
-			},
+			// Advanced: client.Advanced{},
 		})
 
+		//get the length of the videoMedias.Advanced object
+		// log.Printf("videoMediaItem.Advanced: %+v", videoMediaItem.Advanced)
+
+		// // Check if Advanced is not empty.
+		// if !reflect.DeepEqual(videoMediaItem.Advanced, nil) || !reflect.DeepEqual(videoMediaItem.Advanced, Advanced{}) {
+		// 	videoMedias[len(videoMedias)-1].Advanced = client.Advanced{
+		// 		Profile:             videoMediaItem.Advanced.Profile.ValueString(),
+		// 		Level:               videoMediaItem.Advanced.Level.ValueString(),
+		// 		Quality:             videoMediaItem.Advanced.Quality.ValueString(),
+		// 		EncodingMode:        videoMediaItem.Advanced.EncodingMode.ValueString(),
+		// 		EncodingQuality:     int(videoMediaItem.Advanced.EncodingQuality.ValueInt64()),
+		// 		QualityOptimization: videoMediaItem.Advanced.QualityOptimization.ValueString(),
+		// 		ClosedGop:           videoMediaItem.Advanced.ClosedGop.ValueBool(),
+		// 		GopSize:             int(videoMediaItem.Advanced.GopSize.ValueInt64()),
+		// 		GopMaxSize:          int(videoMediaItem.Advanced.GopMaxSize.ValueInt64()),
+		// 		Bframe:              videoMediaItem.Advanced.Bframe.ValueBool(),
+		// 		BframeNumber:        int(videoMediaItem.Advanced.BframeNumber.ValueInt64()),
+		// 		KeyFrameIntervalMs:  int(videoMediaItem.Advanced.KeyFrameIntervalMs.ValueInt64()),
+		// 		HorizontalSharpness: int(videoMediaItem.Advanced.HorizontalSharpness.ValueInt64()),
+		// 		VerticalSharpness:   int(videoMediaItem.Advanced.VerticalSharpness.ValueInt64()),
+		// 		LogoEnabled:         videoMediaItem.Advanced.LogoEnabled.ValueBool(),
+		// 		// SavcConfig:          client.SavcConfig{},
+		// 	}
+		// }
+
+		// Check if Advanced.SavcConfig is not empty.
+		// if !reflect.DeepEqual(videoMediaItem.Advanced.SavcConfig, nil) || !reflect.DeepEqual(videoMediaItem.Advanced.SavcConfig, Advanced{}) {
+		// 	videoMedias[len(videoMedias)-1].Advanced.SavcConfig = client.SavcConfig{
+		// 		ForceSignalLevel:     videoMediaItem.Advanced.SavcConfig.ForceSignalLevel.ValueBool(),
+		// 		BufsizeRatio:         videoMediaItem.Advanced.SavcConfig.BufsizeRatio.ValueFloat64(),
+		// 		RcInitOccupancy:      videoMediaItem.Advanced.SavcConfig.RcInitOccupancy.ValueFloat64(),
+		// 		QualitySpeedOverride: videoMediaItem.Advanced.SavcConfig.QualitySpeedOverride.ValueString(),
+		// 	}
+		// }
 	}
 
 	var audioMedias = []client.AudioMedia{}
@@ -386,7 +432,9 @@ func ProcessingPresetsModelToProcessingPresets(processing processingPresetsResou
 			Samplerate:       audioMediaItem.Samplerate.ValueString(),
 			Track:            audioMediaItem.Track.ValueString(),
 			Output:           audioMediaItem.Output.ValueString(),
+			OutputLabel:      audioMediaItem.OutputLabel.ValueString(),
 			AudioDescription: audioMediaItem.AudioDescription.ValueBool(),
+			Label:            audioMediaItem.Label.ValueString(),
 		})
 	}
 
@@ -394,7 +442,9 @@ func ProcessingPresetsModelToProcessingPresets(processing processingPresetsResou
 	for _, subtitleMediaItem := range processing.SubtitleMedias {
 		subtitleMedias = append(subtitleMedias, client.SubtitleMedia{
 			Track:                subtitleMediaItem.Track.ValueString(),
+			Bitrate:              int(subtitleMediaItem.Bitrate.ValueInt64()),
 			Output:               subtitleMediaItem.Output.ValueString(),
+			OutputLabel:          subtitleMediaItem.OutputLabel.ValueString(),
 			DeafAndHardOfHearing: subtitleMediaItem.DeafAndHardOfHearing.ValueBool(),
 		})
 	}
@@ -402,30 +452,30 @@ func ProcessingPresetsModelToProcessingPresets(processing processingPresetsResou
 	newProcessing.VideoMedias = videoMedias
 	newProcessing.AudioMedias = audioMedias
 	newProcessing.SubtitleMedias = subtitleMedias
-	newProcessing.Labels = []string{}
-	for _, labelItem := range processing.Labels {
-		newProcessing.Labels = append(newProcessing.Labels, labelItem.ValueString())
-	}
+	// newProcessing.Labels = []string{}
+	// for _, labelItem := range processing.Labels {
+	// 	newProcessing.Labels = append(newProcessing.Labels, labelItem.ValueString())
+	// }
+
+	newProcessing.ModifiedAt = string(time.Now().Format(time.RFC850))
 
 	return &newProcessing
 }
 
-func ProcessingPresetsToProcessingPresetsModel(processing client.ProcessingPresets, model *processingPresetsResourceModel) {
-
-	log.Printf("ProcessingPresetsToProcessingPresetsModel processing: %+v", processing)
-	log.Printf("ProcessingPresetsToProcessingPresetsModel model: %+v", model)
+func ProcessingPresetsJsonToProcessingPresetsModel(processing client.ProcessingPresets, model *processingPresetsResourceModel) {
 
 	model.Uuid = types.StringValue(processing.Uuid)
 	model.Name = types.StringValue(processing.Name)
-	model.Published = types.BoolValue(processing.Published)
-	model.PoolUuid = types.StringValue(processing.PoolUuid)
+	// model.Published = types.BoolValue(processing.Published)
+	// model.PoolUuid = types.StringValue(processing.PoolUuid)
 
 	model.VideoMedias = []VideoMedia{}
 	for _, videoMediaItem := range processing.VideoMedias {
+
 		model.VideoMedias = append(model.VideoMedias, VideoMedia{
-			Label:     types.StringValue(videoMediaItem.Label),
-			Codec:     types.StringValue(videoMediaItem.Codec),
-			Coder:     types.StringValue(videoMediaItem.Coder),
+			Label: types.StringValue(videoMediaItem.Label),
+			Codec: types.StringValue(videoMediaItem.Codec),
+			// Coder:     types.StringValue(videoMediaItem.Coder),
 			Bitrate:   types.Int64Value(int64(videoMediaItem.Bitrate)),
 			Framerate: types.StringValue(videoMediaItem.Framerate),
 
@@ -433,40 +483,73 @@ func ProcessingPresetsToProcessingPresetsModel(processing client.ProcessingPrese
 				Width:  types.Int64Value(int64(videoMediaItem.Resolution.Width)),
 				Height: types.Int64Value(int64(videoMediaItem.Resolution.Height)),
 			},
-
-			Advanced: Advanced{
-				Profile:             types.StringValue(videoMediaItem.Advanced.Profile),
-				Level:               types.StringValue(videoMediaItem.Advanced.Level),
-				Quality:             types.StringValue(videoMediaItem.Advanced.Quality),
-				EncodingMode:        types.StringValue(videoMediaItem.Advanced.EncodingMode),
-				EncodingQuality:     types.Int64Value(int64(videoMediaItem.Advanced.EncodingQuality)),
-				QualityOptimization: types.StringValue(videoMediaItem.Advanced.QualityOptimization),
-				ClosedGop:           types.BoolValue(videoMediaItem.Advanced.ClosedGop),
-				GopSize:             types.Int64Value(int64(videoMediaItem.Advanced.GopSize)),
-				GopMaxSize:          types.Int64Value(int64(videoMediaItem.Advanced.GopMaxSize)),
-				Bframe:              types.BoolValue(videoMediaItem.Advanced.Bframe),
-				BframeNumber:        types.Int64Value(int64(videoMediaItem.Advanced.BframeNumber)),
-				KeyFrameIntervalMs:  types.Int64Value(int64(videoMediaItem.Advanced.KeyFrameIntervalMs)),
-				HorizontalSharpness: types.Int64Value(int64(videoMediaItem.Advanced.HorizontalSharpness)),
-				VerticalSharpness:   types.Int64Value(int64(videoMediaItem.Advanced.VerticalSharpness)),
-				LogoEnabled:         types.BoolValue(videoMediaItem.Advanced.LogoEnabled),
-				SavcConfig:          SavcConfig{},
-			},
 		})
 	}
+	// init advanced.
+	// log.Printf("videoMediaItem.Advanced.SavcConfig: %+v", videoMediaItem.Advanced.SavcConfig)
+	// if (!reflect.DeepEqual(videoMediaItem.Advanced, nil) || !reflect.DeepEqual(videoMediaItem.Advanced, client.Advanced{})) {
+	// if (videoMediaItem.Advanced != client.Advanced{}) {
+
+	// savcConfig := SavcConfig{}
+
+	// if !reflect.DeepEqual(nil, videoMediaItem.Advanced.SavcConfig) || !reflect.DeepEqual(videoMediaItem.Advanced.SavcConfig, client.SavcConfig{}) {
+	// 	savcConfig = SavcConfig{
+	// 		ForceSignalLevel:     types.BoolValue(videoMediaItem.Advanced.SavcConfig.ForceSignalLevel),
+	// 		BufsizeRatio:         types.Float64Value(videoMediaItem.Advanced.SavcConfig.BufsizeRatio),
+	// 		RcInitOccupancy:      types.Float64Value(videoMediaItem.Advanced.SavcConfig.RcInitOccupancy),
+	// 		QualitySpeedOverride: types.StringValue(videoMediaItem.Advanced.SavcConfig.QualitySpeedOverride),
+	// 	}
+	// }
+
+	// advanced := Advanced{
+	// 	Profile:             types.StringValue(videoMediaItem.Advanced.Profile),
+	// 	Level:               types.StringValue(videoMediaItem.Advanced.Level),
+	// 	Quality:             types.StringValue(videoMediaItem.Advanced.Quality),
+	// 	EncodingMode:        types.StringValue(videoMediaItem.Advanced.EncodingMode),
+	// 	EncodingQuality:     types.Int64Value(int64(videoMediaItem.Advanced.EncodingQuality)),
+	// 	QualityOptimization: types.StringValue(videoMediaItem.Advanced.QualityOptimization),
+	// 	ClosedGop:           types.BoolValue(videoMediaItem.Advanced.ClosedGop),
+	// 	GopSize:             types.Int64Value(int64(videoMediaItem.Advanced.GopSize)),
+	// 	GopMaxSize:          types.Int64Value(int64(videoMediaItem.Advanced.GopMaxSize)),
+	// 	Bframe:              types.BoolValue(videoMediaItem.Advanced.Bframe),
+	// 	BframeNumber:        types.Int64Value(int64(videoMediaItem.Advanced.BframeNumber)),
+	// 	KeyFrameIntervalMs:  types.Int64Value(int64(videoMediaItem.Advanced.KeyFrameIntervalMs)),
+	// 	HorizontalSharpness: types.Int64Value(int64(videoMediaItem.Advanced.HorizontalSharpness)),
+	// 	VerticalSharpness:   types.Int64Value(int64(videoMediaItem.Advanced.VerticalSharpness)),
+	// 	LogoEnabled:         types.BoolValue(videoMediaItem.Advanced.LogoEnabled),
+	// 	// SavcConfig:          savcConfig,
+	// }
+
+	// 	model.VideoMedias = append(model.VideoMedias, VideoMedia{
+	// 		Label: types.StringValue(videoMediaItem.Label),
+	// 		Codec: types.StringValue(videoMediaItem.Codec),
+	// 		// Coder:     types.StringValue(videoMediaItem.Coder),
+	// 		Bitrate:   types.Int64Value(int64(videoMediaItem.Bitrate)),
+	// 		Framerate: types.StringValue(videoMediaItem.Framerate),
+
+	// 		Resolution: Resolution{
+	// 			Width:  types.Int64Value(int64(videoMediaItem.Resolution.Width)),
+	// 			Height: types.Int64Value(int64(videoMediaItem.Resolution.Height)),
+	// 		},
+	// 		Advanced: advanced,
+	// 	})
+	// } else {
+
+	// }
 
 	model.AudioMedias = []AudioMedia{}
 
 	for _, audioMediaItem := range processing.AudioMedias {
 		model.AudioMedias = append(model.AudioMedias, AudioMedia{
-			Label:            types.StringValue(audioMediaItem.Label),
 			Codec:            types.StringValue(audioMediaItem.Codec),
 			Channels:         types.StringValue(audioMediaItem.Channels),
 			Bitrate:          types.Int64Value(int64(audioMediaItem.Bitrate)),
 			Samplerate:       types.StringValue(audioMediaItem.Samplerate),
 			Track:            types.StringValue(audioMediaItem.Track),
 			Output:           types.StringValue(audioMediaItem.Output),
+			OutputLabel:      types.StringValue(audioMediaItem.OutputLabel),
 			AudioDescription: types.BoolValue(audioMediaItem.AudioDescription),
+			Label:            types.StringValue(audioMediaItem.Label),
 		})
 	}
 
@@ -474,17 +557,18 @@ func ProcessingPresetsToProcessingPresetsModel(processing client.ProcessingPrese
 	for _, subtitleMediaItem := range processing.SubtitleMedias {
 		model.SubtitleMedias = append(model.SubtitleMedias, SubtitleMedia{
 			Track:                types.StringValue(subtitleMediaItem.Track),
+			Bitrate:              types.Int64Value(int64(subtitleMediaItem.Bitrate)),
 			Output:               types.StringValue(subtitleMediaItem.Output),
+			OutputLabel:          types.StringValue(subtitleMediaItem.OutputLabel),
 			DeafAndHardOfHearing: types.BoolValue(subtitleMediaItem.DeafAndHardOfHearing),
 		})
 	}
 
-	model.Labels = []types.String{}
-	for _, labelItem := range processing.Labels {
-		model.Labels = append(model.Labels, types.StringValue(labelItem))
-	}
+	// model.Labels = []types.String{}
+	// for _, labelItem := range processing.Labels {
+	// 	model.Labels = append(model.Labels, types.StringValue(labelItem))
+	// }
 
-	model.ModifiedAt = types.StringValue(time.Now().Format(time.RFC850))
 }
 
 func (r *processingPresetsResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -497,9 +581,9 @@ func (r *processingPresetsResource) Create(ctx context.Context, req resource.Cre
 		return
 	}
 
-	newProcessingPresets := ProcessingPresetsModelToProcessingPresets(processing)
+	newProcessingPresets := ProcessingPresetsModelToProcessingPresetsJson(processing)
 
-	rproc, err := r.client.CreateManageProcessingPresets(*newProcessingPresets)
+	rproc, err := r.client.CreateManageProcessingPresets(*newProcessingPresets, processing.Organization.ValueString(), processing.Type.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Failed to create processing presets.",
@@ -509,11 +593,11 @@ func (r *processingPresetsResource) Create(ctx context.Context, req resource.Cre
 	}
 
 	// Map response body to schema and populate Computed attribute values.
-	processing.Identifier = types.StringValue(rproc.Identifier)
+	// processing.Identifier = types.StringValue(rproc.Identifier)
 	processing.Name = types.StringValue(rproc.Name)
 	processing.Uuid = types.StringValue(rproc.Uuid)
 
-	ProcessingPresetsToProcessingPresetsModel(*rproc, &processing)
+	ProcessingPresetsJsonToProcessingPresetsModel(*rproc, &processing)
 
 	diags = resp.State.Set(ctx, processing)
 	resp.Diagnostics.Append(diags...)
@@ -532,16 +616,17 @@ func (r *processingPresetsResource) Read(ctx context.Context, req resource.ReadR
 		return
 	}
 
-	rproc, err := r.client.GetManageProcessingPresets(processing.Uuid.ValueString())
+	rproc, err := r.client.GetManageProcessingPresets(processing.Uuid.ValueString(), processing.Organization.ValueString(), processing.Type.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Failed to read processing presets.",
-			"Could not read processing presets, unexpected error: "+err.Error(),
+			"Could not read processing presets with UUID "+processing.Uuid.ValueString()+", unexpected error: "+err.Error(),
 		)
 		return
 	}
 
-	ProcessingPresetsToProcessingPresetsModel(*rproc, &processing)
+	processing.Uuid = types.StringValue((rproc.Uuid))
+	ProcessingPresetsJsonToProcessingPresetsModel(*rproc, &processing)
 
 	diags = resp.State.Set(ctx, processing)
 	resp.Diagnostics.Append(diags...)
@@ -560,9 +645,9 @@ func (r *processingPresetsResource) Update(ctx context.Context, req resource.Upd
 		return
 	}
 
-	newProcessingPresets := ProcessingPresetsModelToProcessingPresets(processing)
+	newProcessingPresets := ProcessingPresetsModelToProcessingPresetsJson(processing)
 
-	rproc, err := r.client.UpdateManageProcessingPresets(processing.Uuid.ValueString(), *newProcessingPresets)
+	_, err := r.client.UpdateManageProcessingPresets(processing.Uuid.ValueString(), *newProcessingPresets, processing.Organization.ValueString(), processing.Type.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Failed to update processing presets.",
@@ -571,12 +656,22 @@ func (r *processingPresetsResource) Update(ctx context.Context, req resource.Upd
 		return
 	}
 
+	// Fetch updated items from GetOrder as UpdateOrder items are not
+	// populated.
+	rproc, err := r.client.GetManageProcessingPresets(processing.Uuid.ValueString(), processing.Organization.ValueString(), processing.Type.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Error Reading Administration Plan",
+			"Could not read processing presets with UUID "+processing.Uuid.ValueString()+", unexpected error: "+err.Error(),
+		)
+		return
+	}
 	// Map response body to schema and populate Computed attribute values.
-	processing.Identifier = types.StringValue(rproc.Identifier)
-	processing.Name = types.StringValue(rproc.Name)
-	processing.Uuid = types.StringValue(rproc.Uuid)
+	// processing.Identifier = types.StringValue(rproc.Identifier)
+	// processing.Name = types.StringValue(rproc.Name)
+	// processing.Uuid = types.StringValue(rproc.Uuid)
 
-	ProcessingPresetsToProcessingPresetsModel(*rproc, &processing)
+	ProcessingPresetsJsonToProcessingPresetsModel(*rproc, &processing)
 
 	diags = resp.State.Set(ctx, processing)
 	resp.Diagnostics.Append(diags...)
@@ -595,7 +690,7 @@ func (r *processingPresetsResource) Delete(ctx context.Context, req resource.Del
 		return
 	}
 
-	err := r.client.DeleteManageProcessingPresets(processing.Uuid.ValueString())
+	err := r.client.DeleteManageProcessingPresets(processing.Uuid.ValueString(), processing.Organization.ValueString(), processing.Type.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Failed to delete processing presets.",

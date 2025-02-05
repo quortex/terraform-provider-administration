@@ -18,20 +18,17 @@ Manages a processing presets.
 ### Required
 
 - `name` (String) Name of the processing presets.
-- `pool_uuid` (String) Pool UUID of the processing presets.
 
 ### Optional
 
 - `audio_medias` (Attributes List) List of audio medias of the processing presets. (see [below for nested schema](#nestedatt--audio_medias))
-- `labels` (List of String) List of labels of the processing presets.
+- `org` (String) Organization UUID of the processing presets needed for admin API.
 - `subtitle_medias` (Attributes List) List of subtitle medias of the processing presets. (see [below for nested schema](#nestedatt--subtitle_medias))
+- `type` (String) Type of the processing presets.
 - `video_medias` (Attributes List) List of video medias of the processing presets. (see [below for nested schema](#nestedatt--video_medias))
 
 ### Read-Only
 
-- `identifier` (String) Identifier of the processing presets.
-- `modified_at` (String)
-- `published` (Boolean) Published status of the processing presets.
 - `uuid` (String) UUID of the processing presets.
 
 <a id="nestedatt--audio_medias"></a>
@@ -45,6 +42,7 @@ Optional:
 - `codec` (String) Codec of the audio media.
 - `label` (String) Label of the audio media.
 - `output` (String) Output of the audio media.
+- `output_label` (String) Output label of the audio media.
 - `samplerate` (String) Sample rate of the audio media.
 - `track` (String) Track of the audio media.
 
@@ -54,8 +52,10 @@ Optional:
 
 Optional:
 
+- `bitrate` (Number) Bitrate of the subtitle media.
 - `deaf_and_hard_of_hearing` (Boolean) Deaf and hard of hearing of the subtitle media.
 - `output` (String) Output of the subtitle media.
+- `output_label` (String) Output label of the subtitle media.
 - `track` (String) Track of the subtitle media.
 
 
@@ -66,12 +66,10 @@ Required:
 
 - `bitrate` (Number) Bitrate of the video media.
 - `codec` (String) Codec of the video media.
-- `coder` (String) Coder of the video media.
 - `resolution` (Attributes) Resolution of the video media. (see [below for nested schema](#nestedatt--video_medias--resolution))
 
 Optional:
 
-- `advanced` (Attributes) (see [below for nested schema](#nestedatt--video_medias--advanced))
 - `framerate` (String) Framerate of the video media.
 - `label` (String) Label of the video media.
 
@@ -82,36 +80,3 @@ Required:
 
 - `height` (Number) Height of the resolution.
 - `width` (Number) Width of the resolution.
-
-
-<a id="nestedatt--video_medias--advanced"></a>
-### Nested Schema for `video_medias.advanced`
-
-Optional:
-
-- `bframe` (Boolean) Bframe of the video media.
-- `bframe_number` (Number) Bframe number of the video media.
-- `closed_gop` (Boolean) Closed gop of the video media.
-- `encoding_mode` (String) Encoding mode of the video media.
-- `encoding_quality` (Number) Encoding quality of the video media.
-- `gop_max_size` (Number) Gop max size of the video media.
-- `gop_size` (Number) Gop size of the video media.
-- `horizontal_sharpness` (Number) Horizontal sharpness of the video media.
-- `key_frame_interval_ms` (Number) Key frame interval ms of the video media.
-- `level` (String) Level of the video media.
-- `logo_enabled` (Boolean) Logo enabled of the video media.
-- `profile` (String) Profile of the video media.
-- `quality` (String) Quality of the video media.
-- `quality_optimization` (String) Quality optimization of the video media.
-- `savc_config` (Attributes) (see [below for nested schema](#nestedatt--video_medias--advanced--savc_config))
-- `vertical_sharpness` (Number) Vertical sharpness of the video media.
-
-<a id="nestedatt--video_medias--advanced--savc_config"></a>
-### Nested Schema for `video_medias.advanced.savc_config`
-
-Optional:
-
-- `bufsize_ratio` (Number) Bufsize ratio of the video media.
-- `force_signal_level` (Boolean) Force signal of the video media.
-- `quality_speed_override` (String) Quality speed override of the video media.
-- `rc_init_occupancy` (Number) Rc init occupancy of the video media.

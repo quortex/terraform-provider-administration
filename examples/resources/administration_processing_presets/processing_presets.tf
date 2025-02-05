@@ -1,26 +1,18 @@
 resource "administration_processing_presets" "preset_1080p_25fps" {
-  name      = "Up to 1080p, H.264, 25fps"
-  pool_uuid = "pool_6lnvgxmv"
-
-  # published = true
-
+  org  = "orga_uuid"
+  type = "standard"
+  name = "Up to 1080p, H.264, 25fps"
   video_medias = [{
-    label = "test"
     codec = "h264"
     coder = "X264"
     resolution = {
-      width  = 1280
-      height = 720
+      width  = 960
+      height = 540
     }
-    bitrate   = 4500000
+    bitrate   = 2000000
     framerate = "25"
-    advanced = {
-
-      # savc_config = {
-      #   force_signal_level = false
-      # }
-    }
-  }]
+    },
+  ]
 
   audio_medias = [{
     codec      = "aac-lc"
