@@ -47,9 +47,9 @@ type Advanced struct {
 }
 
 type VideoMedia struct {
-	Label types.String `tfsdk:"label"`
-	Codec types.String `tfsdk:"codec"`
-	// Coder      types.String `tfsdk:"coder"`.
+	Label      types.String `tfsdk:"label"`
+	Codec      types.String `tfsdk:"codec"`
+	Coder      types.String `tfsdk:"coder"`
 	Resolution Resolution   `tfsdk:"resolution"`
 	Bitrate    types.Int64  `tfsdk:"bitrate"`
 	Framerate  types.String `tfsdk:"framerate"`
@@ -149,10 +149,11 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 							Description: "Codec of the video media.",
 							Required:    true,
 						},
-						// "coder": schema.StringAttribute{
-						// 	Description: "Coder of the video media.",
-						// 	Required:    true,
-						// },.
+						"coder": schema.StringAttribute{
+							Description: "Coder of the video media.",
+							Optional:    true,
+							Computed:    true,
+						},
 						"resolution": schema.SingleNestedAttribute{
 							Description: "Resolution of the video media.",
 							Required:    true,
@@ -361,6 +362,7 @@ func ProcessingPresetsModelToProcessingPresetsJson(processing processingPresetsR
 	for _, videoMediaItem := range processing.VideoMedias {
 		videoMedias = append(videoMedias, client.VideoMedia{
 			Codec:     videoMediaItem.Codec.ValueString(),
+			Coder:     videoMediaItem.Coder.ValueString(),
 			Bitrate:   int(videoMediaItem.Bitrate.ValueInt64()),
 			Framerate: videoMediaItem.Framerate.ValueString(),
 			Resolution: client.Resolution{
@@ -413,6 +415,7 @@ func ProcessingPresetsJsonToProcessingPresetsModel(processing client.ProcessingP
 
 		model.VideoMedias = append(model.VideoMedias, VideoMedia{
 			Label:     types.StringValue(videoMediaItem.Label),
+			Coder:     types.StringValue(videoMediaItem.Coder),
 			Codec:     types.StringValue(videoMediaItem.Codec),
 			Bitrate:   types.Int64Value(int64(videoMediaItem.Bitrate)),
 			Framerate: types.StringValue(videoMediaItem.Framerate),
