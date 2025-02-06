@@ -321,6 +321,7 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 						"track": schema.StringAttribute{
 							Description: "Track of the subtitle media.",
 							Optional:    true,
+							Computed:    true,
 						},
 						"bitrate": schema.Int64Attribute{
 							Description: "Bitrate of the subtitle media.",
