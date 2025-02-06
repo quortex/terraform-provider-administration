@@ -70,6 +70,7 @@ Required:
 
 Optional:
 
+- `coder` (String) Coder of the video media.
 - `framerate` (String) Framerate of the video media.
 - `label` (String) Label of the video media.
 
