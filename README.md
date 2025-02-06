@@ -30,6 +30,16 @@ Then, navigate to the `examples/development` directory.
 $ cd examples/development
 ```
 
+Then update the following variables according to your needs in the provider "adminisatration", for instance in your `main.tf`
+```jsonc
+provider "administration" {
+  auth_server = "https://example.auth.server" //can be omitted to use default
+  host        = "http://localhost:8000" //can be omitted to use default
+  client_id     = "my_client_id"
+  client_secret = "my_client_secret"
+}
+
+```
 Run the following command to initialize the workspace and apply the sample configuration.
 
 ```shell
