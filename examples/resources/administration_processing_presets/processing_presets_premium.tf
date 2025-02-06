@@ -1,6 +1,6 @@
 resource "administration_processing_presets" "preset_2160p_hevc_50fps" {
-  org  = "my_org"
-  type = "premium"
+  org  = "my_optional_org" #optional
+  type = "premium"         #optional
   name = "Up to 2160p, HEVC, 50fps"
   video_medias = [
     {
@@ -123,8 +123,8 @@ resource "administration_processing_presets" "preset_2160p_hevc_50fps" {
 }
 
 resource "administration_processing_presets" "preset_1080p_hevc_50fps" {
-  org  = "my_org"
-  type = "premium"
+  org  = "my_optional_org" #optional
+  type = "premium"         #optional
   name = "Up to 1080p, HEVC, 50fps"
   video_medias = [
     {
@@ -235,8 +235,8 @@ resource "administration_processing_presets" "preset_1080p_hevc_50fps" {
   ]
 }
 resource "administration_processing_presets" "preset_540p_hevc_25fps" {
-  org  = "my_org"
-  type = "premium"
+  org  = "my_optional_org" #optional
+  type = "premium"         #optional
   name = "Up to 540p, HEVC, 25fps"
   video_medias = [
     {
@@ -318,8 +318,8 @@ resource "administration_processing_presets" "preset_540p_hevc_25fps" {
 }
 
 resource "administration_processing_presets" "preset_1080p_h264_50fps" {
-  org  = "my_org"
-  type = "premium"
+  org  = "my_optional_org" #optional
+  type = "premium"         #optional
   name = "Up to 1080p, H.264, 50fps"
   video_medias = [
     {
@@ -430,8 +430,8 @@ resource "administration_processing_presets" "preset_1080p_h264_50fps" {
   ]
 }
 resource "administration_processing_presets" "preset_540p_h264_25fps" {
-  org  = "my_org"
-  type = "premium"
+  org  = "my_optional_org" #optional
+  type = "premium"         #optional
   name = "Up to 540p, H.264, 25fps"
   video_medias = [
     {
@@ -512,8 +512,8 @@ resource "administration_processing_presets" "preset_540p_h264_25fps" {
   ]
 }
 resource "administration_processing_presets" "preset_2160p_hevc_60fps" {
-  org  = "my_org"
-  type = "premium"
+  org  = "my_optional_org" #optional
+  type = "premium"         #optional
   name = "Up to 2160p, HEVC, 60fps"
   video_medias = [
     {
@@ -634,8 +634,8 @@ resource "administration_processing_presets" "preset_2160p_hevc_60fps" {
   ]
 }
 resource "administration_processing_presets" "preset_1080p_hevc_60fps" {
-  org  = "my_org"
-  type = "premium"
+  org  = "my_optional_org" #optional #optional
+  type = "premium"         #optional
   name = "Up to 1080p, HEVC, 60fps"
   video_medias = [
     {
@@ -746,8 +746,8 @@ resource "administration_processing_presets" "preset_1080p_hevc_60fps" {
   ]
 }
 resource "administration_processing_presets" "preset_540p_hevc_30fps" {
-  org  = "my_org"
-  type = "premium"
+  org  = "my_optional_org" #optional
+  type = "premium"         #optional
   name = "Up to 540p, HEVC, 30fps"
   video_medias = [
     {
@@ -828,8 +828,8 @@ resource "administration_processing_presets" "preset_540p_hevc_30fps" {
   ]
 }
 resource "administration_processing_presets" "preset_1080p_h264_60fps" {
-  org  = "my_org"
-  type = "premium"
+  org  = "my_optional_org" #optional
+  type = "premium"         #optional
   name = "Up to 1080p, H.264, 60fps"
   video_medias = [
     {
@@ -940,8 +940,8 @@ resource "administration_processing_presets" "preset_1080p_h264_60fps" {
   ]
 }
 resource "administration_processing_presets" "preset_540p_h264_30fps" {
-  org  = "my_org"
-  type = "premium"
+  org  = "my_optional_org" #optional
+  type = "premium"         #optional
   name = "Up to 540p, H.264, 30fps"
   video_medias = [
     {

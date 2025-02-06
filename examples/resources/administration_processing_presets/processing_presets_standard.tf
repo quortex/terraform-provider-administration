@@ -1,6 +1,6 @@
 resource "administration_processing_presets" "preset_1080p_25fps" {
-  org  = "orga_d7Gpg42L"
-  type = "standard"
+  org  = "my_optional_org" #optional
+  type = "standard"        #optional
   name = "Up to 1080p, H.264, 25fps"
 
   video_medias = [
@@ -72,8 +72,8 @@ resource "administration_processing_presets" "preset_1080p_25fps" {
 }
 
 resource "administration_processing_presets" "preset_720p_25fps" {
-  org  = "orga_d7Gpg42L"
-  type = "standard"
+  org  = "my_optional_org" #optional
+  type = "standard"        #optional
   name = "Up to 720p, H.264, 25fps"
 
   video_medias = [{
@@ -136,8 +136,8 @@ resource "administration_processing_presets" "preset_720p_25fps" {
 }
 
 resource "administration_processing_presets" "preset_540p_25fps" {
-  org  = "orga_d7Gpg42L"
-  type = "standard"
+  org  = "my_optional_org" #optional
+  type = "standard"        #optional
   name = "Up to 540p, H.264, 25fps"
 
   video_medias = [{
@@ -188,8 +188,8 @@ resource "administration_processing_presets" "preset_540p_25fps" {
 }
 
 resource "administration_processing_presets" "preset_1080p_30fps" {
-  org  = "orga_d7Gpg42L"
-  type = "standard"
+  org  = "my_optional_org" #optional
+  type = "standard"        #optional
   name = "Up to 1080p, H.264, 30fps"
 
 
@@ -263,8 +263,8 @@ resource "administration_processing_presets" "preset_1080p_30fps" {
 }
 
 resource "administration_processing_presets" "preset_720p_30fps" {
-  org  = "orga_d7Gpg42L"
-  type = "standard"
+  org  = "my_optional_org" #optional
+  type = "standard"        #optional
   name = "Up to 720p, H.264, 30fps"
 
 
@@ -327,8 +327,8 @@ resource "administration_processing_presets" "preset_720p_30fps" {
 }
 
 resource "administration_processing_presets" "preset_540p_30fps" {
-  org  = "orga_d7Gpg42L"
-  type = "standard"
+  org  = "my_optional_org" #optional
+  type = "standard"        #optional
   name = "Up to 540p, H.264, 30fps"
 
 
@@ -380,8 +380,8 @@ resource "administration_processing_presets" "preset_540p_30fps" {
 }
 
 resource "administration_processing_presets" "preset_1080p_50fps" {
-  org  = "orga_d7Gpg42L"
-  type = "standard"
+  org  = "my_optional_org" #optional
+  type = "standard"        #optional
   name = "Up to 1080p, H.264, 50fps"
 
 
@@ -455,8 +455,8 @@ resource "administration_processing_presets" "preset_1080p_50fps" {
 }
 
 resource "administration_processing_presets" "preset_720p_50fps" {
-  org  = "orga_d7Gpg42L"
-  type = "standard"
+  org  = "my_optional_org" #optional
+  type = "standard"        #optional
   name = "Up to 720p, H.264, 50fps"
 
 
@@ -519,8 +519,8 @@ resource "administration_processing_presets" "preset_720p_50fps" {
 }
 
 resource "administration_processing_presets" "preset_540p_50fps" {
-  org  = "orga_d7Gpg42L"
-  type = "standard"
+  org  = "my_optional_org" #optional
+  type = "standard"        #optional
   name = "Up to 540p, H.264, 50fps"
 
   video_medias = [
@@ -570,8 +570,8 @@ resource "administration_processing_presets" "preset_540p_50fps" {
 }
 
 resource "administration_processing_presets" "preset_1080p_60fps" {
-  org  = "orga_d7Gpg42L"
-  type = "standard"
+  org  = "my_optional_org" #optional
+  type = "standard"        #optional
   name = "Up to 1080p, H.264, 60fps"
 
 
@@ -645,8 +645,8 @@ resource "administration_processing_presets" "preset_1080p_60fps" {
 }
 
 resource "administration_processing_presets" "preset_720p_60fps" {
-  org  = "orga_d7Gpg42L"
-  type = "standard"
+  org  = "my_optional_org" #optional
+  type = "standard"        #optional
   name = "Up to 720p, H.264, 60fps"
   video_medias = [{
     codec = "h264"
@@ -708,8 +708,8 @@ resource "administration_processing_presets" "preset_720p_60fps" {
 
 
 resource "administration_processing_presets" "preset_540p_60fps" {
-  org  = "orga_d7Gpg42L"
-  type = "standard"
+  org  = "my_optional_org" #optional
+  type = "standard"        #optional
   name = "Up to 540p, H.264, 60fps"
 
   video_medias = [{
@@ -760,8 +760,8 @@ resource "administration_processing_presets" "preset_540p_60fps" {
 }
 
 resource "administration_processing_presets" "preset_radio_128kbps" {
-  org  = "orga_d7Gpg42L"
-  type = "standard"
+  org  = "my_optional_org" #optional
+  type = "standard"        #optional
   name = "Radio, up to 128kbps"
 
   video_medias = []
