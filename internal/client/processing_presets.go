@@ -50,8 +50,6 @@ func (c *Client) CreateManageProcessingPresets(preset ProcessingPresets, org str
 		return nil, err
 	}
 
-	// tflog.Info(tflog.Debug, "Processing Preset: %s", string(rb))
-
 	url := fmt.Sprintf("%s/1.0/manage/ott/presets/processings/", c.HostURL)
 	url = addParamToUrl(url, "org", org)
 	url = addParamToUrl(url, "type", ptype)
