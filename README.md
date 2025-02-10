@@ -45,3 +45,8 @@ Run the following command to initialize the workspace and apply the sample confi
 ```shell
 $ terraform init && terraform apply
 ```
+
+## Tests acceptance
+
+Test was inspired from this repo : https://github.com/hashicorp/terraform-provider-scaffolding-framework/tree/main
+
