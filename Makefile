@@ -2,15 +2,18 @@ TEST?=$$(go list ./... | grep -v 'vendor')
 HOSTNAME=localhost
 NAMESPACE=quortex
 NAME=administration
-BINARY=terraform-provider-${NAME}
-VERSION=0.0.4
-OS_ARCH=linux_amd64
+BINARY=terraform-provider-${NAME}_v${VERSION}
+VERSION=0.0.5
+OS_ARCH=$$(uname | tr '[:upper:]' '[:lower:]')_$$(uname -m)
 
 default: install
 
 build:
 	go build -o ${BINARY}
 
+
+test :
+	go test -v $(TEST) -coverprofile=coverage.out
 release:
 	GOOS=darwin GOARCH=amd64 go build -o ./bin/${BINARY}_${VERSION}_darwin_amd64
 	GOOS=darwin GOARCH=arm64 go build -o ./bin/${BINARY}_${VERSION}_darwin_arm64
