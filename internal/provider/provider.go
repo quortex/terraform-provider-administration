@@ -4,6 +4,8 @@ import (
 	"context"
 	"os"
 
+	"terraform-provider-administration/internal/client"
+
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
@@ -11,7 +13,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"terraform-provider-administration/internal/client"
 )
 
 // Ensure the implementation satisfies the expected interfaces.
@@ -235,5 +236,6 @@ func (p *administrationProvider) DataSources(_ context.Context) []func() datasou
 func (p *administrationProvider) Resources(_ context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewPlanResource,
+		NewProcessingPresetsResource,
 	}
 }

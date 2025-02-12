@@ -20,3 +20,7 @@
 # Go workspace file
 go.work
 go.work.sum
+
+/local/.terraform**
+/local/terraform.tfstate
+**/.terraform/**
