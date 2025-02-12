@@ -21,5 +21,6 @@
 go.work
 go.work.sum
 
-/local/**
+/local/.terraform**
+/local/terraform.tfstate
 **/.terraform/**

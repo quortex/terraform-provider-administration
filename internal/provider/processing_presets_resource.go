@@ -130,7 +130,6 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-
 			"name": schema.StringAttribute{
 				Description: "Name of the processing presets.",
 				Required:    true,

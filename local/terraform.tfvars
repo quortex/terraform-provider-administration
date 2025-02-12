@@ -1,0 +1,5 @@
+client_id         = "your_client_id_here"
+client_secret     = "your_client_secret_here"
+auth_server       = "https://auth.dev.saas-dev.quortex.io"
+host              = "http://localhost:8000"
+my_local_test_org = "set your local test org here"

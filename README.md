@@ -30,7 +30,7 @@ Then, navigate to the `examples/development` directory.
 $ cd examples/development
 ```
 
-Then update the following variables according to your needs in the provider "adminisatration", for instance in your `main.tf`
+Then update the following variables according to your needs in the provider "administration", for instance in your `main.tf` or define the variables in `./local/terraform.tfvars`
 ```jsonc
 provider "administration" {
   auth_server = "https://example.auth.server" //can be omitted to use default
@@ -46,7 +46,25 @@ Run the following command to initialize the workspace and apply the sample confi
 $ terraform init && terraform apply
 ```
 
-## Tests acceptance
+## Run Terraform tests :
+
+Inspired from : https://developer.hashicorp.com/terraform/tutorials/configuration-language/test
+Go into `./local`
+Change the configs for this right ones according the credentials in `./local/terraform.tfvars`.
+Change the variable `my_local_test_org` you want to test in `./local/tests/setup/main.tf`
+
+To launch local test : 
+Change in `main.go` : `Address: "localhost/quortex/administration",`
+
+```shell
+$ make install
+```
+
+Then :  
+```shell
+$ terraform init && terraform apply
+```
+
+## Tests acceptance (yet abandonned)
 
 Test was inspired from this repo : https://github.com/hashicorp/terraform-provider-scaffolding-framework/tree/main
-
