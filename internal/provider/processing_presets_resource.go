@@ -361,6 +361,7 @@ func ProcessingPresetsModelToProcessingPresetsJson(processing processingPresetsR
 	for _, videoMediaItem := range processing.VideoMedias {
 		videoMedias = append(videoMedias, client.VideoMedia{
 			Codec:     videoMediaItem.Codec.ValueString(),
+			Label:     videoMediaItem.Label.ValueString(),
 			Coder:     videoMediaItem.Coder.ValueString(),
 			Bitrate:   int(videoMediaItem.Bitrate.ValueInt64()),
 			Framerate: videoMediaItem.Framerate.ValueString(),

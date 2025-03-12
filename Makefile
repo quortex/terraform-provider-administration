@@ -3,7 +3,7 @@ HOSTNAME=localhost
 NAMESPACE=quortex
 NAME=administration
 BINARY=terraform-provider-${NAME}_v${VERSION}
-VERSION=0.0.5
+VERSION=0.0.6
 OS_ARCH=$$(uname | tr '[:upper:]' '[:lower:]')_$$(uname -m)
 
 default: install
