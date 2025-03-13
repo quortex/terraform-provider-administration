@@ -6,7 +6,7 @@ type Resolution struct {
 }
 
 type VideoMedia struct {
-	Label      string     `json:"label"`
+	Label      string     `json:"label,omitempty"`
 	Codec      string     `json:"codec"`
 	Coder      string     `json:"coder,omitempty"`
 	Bitrate    int        `json:"bitrate"`
@@ -30,10 +30,10 @@ type AudioMedia struct {
 type SubtitleMedia struct {
 	Uuid                 string `json:"uuid,omitempty"`
 	Track                string `json:"track"`
-	Bitrate              int    `json:"bitrate"`
-	Output               string `json:"output"`
-	OutputLabel          string `json:"output_label"`
-	DeafAndHardOfHearing bool   `json:"deaf_and_hard_of_hearing"`
+	Bitrate              int    `json:"bitrate,omitempty"`
+	Output               string `json:"output,omitempty"`
+	OutputLabel          string `json:"output_label,omitempty"`
+	DeafAndHardOfHearing bool   `json:"deaf_and_hard_of_hearing,omitempty"`
 }
 
 type ProcessingPresets struct {

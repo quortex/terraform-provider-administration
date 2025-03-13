@@ -10,6 +10,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -143,6 +145,9 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 							Description: "Label of the video media.",
 							Optional:    true,
 							Computed:    true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplaceIfConfigured(),
+							},
 						},
 						"codec": schema.StringAttribute{
 							Description: "Codec of the video media.",
@@ -327,21 +332,33 @@ func (r *processingPresetsResource) Schema(_ context.Context, _ resource.SchemaR
 							Description: "Bitrate of the subtitle media.",
 							Optional:    true,
 							Computed:    true,
+							PlanModifiers: []planmodifier.Int64{
+								int64planmodifier.RequiresReplaceIfConfigured(),
+							},
 						},
 						"output": schema.StringAttribute{
 							Description: "Output of the subtitle media.",
 							Optional:    true,
 							Computed:    true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplaceIfConfigured(),
+							},
 						},
 						"output_label": schema.StringAttribute{
 							Description: "Output label of the subtitle media.",
 							Optional:    true,
 							Computed:    true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplaceIfConfigured(),
+							},
 						},
 						"deaf_and_hard_of_hearing": schema.BoolAttribute{
 							Description: "Deaf and hard of hearing of the subtitle media.",
 							Optional:    true,
 							Computed:    true,
+							PlanModifiers: []planmodifier.Bool{
+								boolplanmodifier.RequiresReplaceIfConfigured(),
+							},
 						},
 					},
 				},
@@ -412,7 +429,6 @@ func ProcessingPresetsJsonToProcessingPresetsModel(processing client.ProcessingP
 
 	model.VideoMedias = []VideoMedia{}
 	for _, videoMediaItem := range processing.VideoMedias {
-
 		model.VideoMedias = append(model.VideoMedias, VideoMedia{
 			Label:     types.StringValue(videoMediaItem.Label),
 			Coder:     types.StringValue(videoMediaItem.Coder),

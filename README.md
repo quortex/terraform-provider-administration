@@ -56,6 +56,8 @@ Change the variable `my_local_test_org` you want to test in `./local/tests/setup
 To launch local test : 
 Change in `main.go` : `Address: "localhost/quortex/administration",`
 
+In Makefile make sure that when you build that the OS_ARCH is correct according to your environment.
+
 ```shell
 $ make install
 ```

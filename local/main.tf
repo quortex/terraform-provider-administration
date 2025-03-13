@@ -2,7 +2,7 @@ terraform {
   required_version = "~> 1.10.5"
   required_providers {
     administration = {
-      version = "0.0.4"
+      version = "0.0.7"
       source  = "localhost/quortex/administration"
     }
     # quortex = {

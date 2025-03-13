@@ -3,7 +3,9 @@ HOSTNAME=localhost
 NAMESPACE=quortex
 NAME=administration
 BINARY=terraform-provider-${NAME}_v${VERSION}
-VERSION=0.0.6
+VERSION=0.0.7
+# if local build you can change for instance (according to your system) for
+#OS_ARCH=linux_amd64
 OS_ARCH=$$(uname | tr '[:upper:]' '[:lower:]')_$$(uname -m)
 
 default: install
