@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     administration = {
-      version = "0.0.4"
+      version = "0.0.7"
       # source  = "quortex/administration"
       source = "localhost/quortex/administration"
     }
